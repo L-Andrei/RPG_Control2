@@ -1,0 +1,39 @@
+-- Criação do banco de dados (se ainda não existir)
+CREATE DATABASE IF NOT EXISTS rpg_manager;
+USE rpg_manager;
+
+-- Tabela usuario
+CREATE TABLE usuario (
+    email VARCHAR(150) PRIMARY KEY,
+    senha VARCHAR(255) NOT NULL
+);
+
+-- Tabela mesa
+CREATE TABLE mesa (
+    id_mesa INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    descricao TEXT,
+    criador_email VARCHAR(150),
+    FOREIGN KEY (criador_email) REFERENCES usuario(email) ON DELETE SET NULL
+);
+
+-- Tabela personagem
+CREATE TABLE personagem (
+    id_personagem INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    classe VARCHAR(50),
+    nivel INT DEFAULT 1,
+    usuario_email VARCHAR(150),
+    id_mesa INT,
+    FOREIGN KEY (usuario_email) REFERENCES usuario(email) ON DELETE CASCADE,
+    FOREIGN KEY (id_mesa) REFERENCES mesa(id_mesa) ON DELETE SET NULL
+);
+
+-- Tabela participante_mesa
+CREATE TABLE participante_mesa (
+    usuario_email VARCHAR(150),
+    id_mesa INT,
+    PRIMARY KEY (usuario_email, id_mesa),
+    FOREIGN KEY (usuario_email) REFERENCES usuario(email) ON DELETE CASCADE,
+    FOREIGN KEY (id_mesa) REFERENCES mesa(id_mesa) ON DELETE CASCADE
+);

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <title>Cadastro/Login</title>
+</head>
+<body>
+    <h1>Cadastro / Login</h1>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+          {% for msg in messages %}
+            <li>{{ msg }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <form method="post" action="{{ url_for('index') }}">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required /><br><br>
+
+        <label for="senha">Senha:</label><br>
+        <input type="password" id="senha" name="senha" required /><br><br>
+
+        <label>
+            <input type="radio" name="acao" value="cadastro" checked /> Cadastro
+        </label>
+        <label>
+            <input type="radio" name="acao" value="login" /> Login
+        </label><br><br>
+
+        <button type="submit">Enviar</button>
+    </form>
+</body>
+</html>
