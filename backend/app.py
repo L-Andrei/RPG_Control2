@@ -4,7 +4,7 @@ import pymysql
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["http://localhost:8433"])
+CORS(app)
 
 # Configurações do SSH
 SSH_HOST = '0.0.0.0'           # IP ou domínio do servidor
