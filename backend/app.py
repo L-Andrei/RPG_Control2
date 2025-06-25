@@ -7,7 +7,7 @@ from sshtunnel import SSHTunnelForwarder
 app = Flask(__name__)
 CORS(app)
 
-DB_HOST = '127.0.0.1'
+DB_HOST = '164.152.36.34'
 DB_PORT = 3306
 DB_USER = 'rpgadmin'
 DB_PASSWORD = 'parrot'
