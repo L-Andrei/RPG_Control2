@@ -7,16 +7,16 @@ from sshtunnel import SSHTunnelForwarder
 app = Flask(__name__)
 CORS(app)
 
-DB_HOST = '164.152.36.34'
-DB_PORT = 3306
+DB_HOST = '127.0.0.1'          # O túnel entrega localmente
+DB_PORT = 3307                 # Porta local usada no túnel
 DB_USER = 'rpgadmin'
 DB_PASSWORD = 'parrot'
 DB_NAME = 'rpg_manager'
 
-SSH_HOST = '164.152.36.34'
+SSH_HOST = '164.152.36.34'     # IP do servidor que aceita SSH
 SSH_PORT = 22
 SSH_USER = 'ubuntu'
-SSH_PKEY = 'id_rsa'
+SSH_PKEY = 'id_rsa'  # Caminho da chave privada no backend
 
 def criar_conexao():
     # Cria o túnel SSH
