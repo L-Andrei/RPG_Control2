@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import pymysql
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
+from sshtunnel import SSHTunnelForwarder
 
 app = Flask(__name__)
 CORS(app)
@@ -12,16 +13,35 @@ DB_USER = 'rpgadmin'
 DB_PASSWORD = 'parrot'
 DB_NAME = 'rpg_manager'
 
+SSH_HOST = 'localhost'
+SSH_PORT = 22
+SSH_USER = 'user'
+SSH_PKEY = 'id_rsa'
+
 def criar_conexao():
+    # Cria o túnel SSH
+    server = SSHTunnelForwarder(
+        (SSH_HOST, SSH_PORT),
+        ssh_username=SSH_USER,
+        ssh_pkey=SSH_PKEY,
+        remote_bind_address=(DB_HOST, DB_PORT)
+    )
+    server.start()
+
+    # Conecta no banco via porta local do túnel
     conn = pymysql.connect(
-        host=DB_HOST,
-        port=DB_PORT,
+        host='127.0.0.1',
+        port=server.local_bind_port,
         user=DB_USER,
         password=DB_PASSWORD,
         database=DB_NAME,
         cursorclass=pymysql.cursors.DictCursor
     )
+    
+    # Para garantir que o túnel não feche, você pode adicionar a referência do server no objeto de conexão
+    conn.ssh_tunnel = server
     return conn
+
 
 """
 curl -k -X POST https://localhost:8443/cadastro \
@@ -54,6 +74,7 @@ def cadastro():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k -X POST https://localhost:8443/login \
@@ -88,6 +109,7 @@ def login():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k -X POST https://localhost:8443/criar_mesa \
@@ -131,6 +153,7 @@ def criar_mesa():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k -X POST https://localhost:8443/personagem \
@@ -186,6 +209,7 @@ def criar_personagem():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 
 """
@@ -220,6 +244,7 @@ def consultar_mesa(id_mesa):
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k https://localhost:8443/personagem/2/usuario@example.com
@@ -247,6 +272,7 @@ def consultar_personagem(id_mesa, email):
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 
 """
@@ -288,6 +314,7 @@ def adicionar_participante():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k -X PUT https://localhost:8443/usuario/update \
@@ -327,6 +354,7 @@ def atualizar_usuario():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k -X PUT https://localhost:8443/personagem/update \
@@ -391,6 +419,7 @@ def atualizar_personagem():
         return jsonify({'error': str(e)}), 500
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 """
 curl -k -X DELETE https://localhost:8443/expulsar \
@@ -439,6 +468,7 @@ def expulsar_jogador():
 
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 
 """
@@ -488,6 +518,7 @@ def deletar_mesa(id_mesa):
 
     finally:
         conn.close()
+        conn.ssh_tunnel.stop()
 
 if __name__ == '__main__':
     app.run(debug=True, ssl_context=('cert.pem', 'key.pem'), host='0.0.0.0', port=8443)
