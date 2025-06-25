@@ -13,9 +13,9 @@ DB_USER = 'rpgadmin'
 DB_PASSWORD = 'parrot'
 DB_NAME = 'rpg_manager'
 
-SSH_HOST = 'localhost'
+SSH_HOST = '164.152.36.34'
 SSH_PORT = 22
-SSH_USER = 'user'
+SSH_USER = 'ubuntu'
 SSH_PKEY = 'id_rsa'
 
 def criar_conexao():
