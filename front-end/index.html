@@ -1,29 +1,25 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <title>Cadastro/Login</title>
+    <script src="js/login_cadastro.js" defer></script>
 </head>
 <body>
-    <h1>Cadastro / Login</h1>
-
-    <div id="mensagem" style="color: red; margin-bottom: 1em;"></div>
-
-    <form id="formLoginCadastro">
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required /><br><br>
-
-        <label for="senha">Senha:</label><br>
-        <input type="password" id="senha" name="senha" required /><br><br>
-
-        <label>
-            <input type="radio" name="acao" value="cadastro" checked /> Cadastro
-        </label>
-        <label>
-            <input type="radio" name="acao" value="login" /> Login
-        </label><br><br>
-
-        <button type="submit">Enviar</button>
+    <h2>Cadastro</h2>
+    <form id="formCadastro">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="senha" placeholder="Senha" required>
+        <button type="submit">Cadastrar</button>
     </form>
+    <div id="respostaCadastro"></div>
+
+    <h2>Login</h2>
+    <form id="formLogin">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="senha" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+    </form>
+    <div id="respostaLogin"></div>
 </body>
 </html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Perfil do Usuário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .perfil-container {
+            max-width: 400px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 6px;
+        }
+        .senha-update {
+            display: none;
+            margin-top: 15px;
+        }
+        button {
+            padding: 8px 16px;
+            margin-top: 10px;
+        }
+        label, input {
+            display: block;
+            margin-top: 10px;
+            width: 100%;
+        }
+        .mensagem {
+            margin-top: 15px;
+            color: green;
+        }
+        .erro {
+            margin-top: 15px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="perfil-container">
+        <h2>Perfil do Usuário</h2>
+        <p><strong>Email:</strong> <span id="usuarioEmail"></span></p>
+
+        <button onclick="mostrarFormularioSenha()">Update Senha</button>
+
+        <div class="senha-update" id="formSenha">
+            <h3>Alterar Senha</h3>
+            <form id="updateSenhaForm">
+                <label for="novaSenha">Nova Senha:</label>
+                <input type="password" id="novaSenha" name="novaSenha" required>
+
+                <label for="confirmarSenha">Confirmar Nova Senha:</label>
+                <input type="password" id="confirmarSenha" name="confirmarSenha" required>
+
+                <button type="submit">Salvar Senha</button>
+            </form>
+            <div id="mensagemSenha"></div>
+        </div>
+    </div>
+
+    <script>
+        // Função para ler cookies
+        function getCookie(nome) {
+            const valor = `; ${document.cookie}`;
+            const partes = valor.split(`; ${nome}=`);
+            if (partes.length === 2) return decodeURIComponent(partes.pop().split(';').shift());
+        }
+
+        // Preenche o e-mail a partir do cookie
+        const email = getCookie('usuario_email');
+        document.getElementById('usuarioEmail').textContent = email || '[Desconhecido]';
+
+        // Exibe o formulário de atualização de senha
+        function mostrarFormularioSenha() {
+            document.getElementById('formSenha').style.display = 'block';
+        }
+
+        // Lida com o envio do formulário
+        document.getElementById('updateSenhaForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const novaSenha = document.getElementById('novaSenha').value;
+            const confirmarSenha = document.getElementById('confirmarSenha').value;
+            const mensagemDiv = document.getElementById('mensagemSenha');
+
+            if (novaSenha !== confirmarSenha) {
+                mensagemDiv.textContent = 'As senhas não coincidem.';
+                mensagemDiv.className = 'erro';
+                return;
+            }
+
+            fetch('/usuario/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    senha: novaSenha
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.message) {
+                    mensagemDiv.textContent = data.message;
+                    mensagemDiv.className = 'mensagem';
+                } else {
+                    mensagemDiv.textContent = data.error || 'Erro ao atualizar senha.';
+                    mensagemDiv.className = 'erro';
+                }
+            })
+            .catch(err => {
+                mensagemDiv.textContent = 'Erro na requisição.';
+                mensagemDiv.className = 'erro';
+            });
+        });
+    </script>
+
+</body>
+</html>

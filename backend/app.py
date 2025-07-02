@@ -5,10 +5,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sshtunnel import SSHTunnelForwarder
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True, resources={r"/*": {
+    "origins": "*",
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"]
+}})
 
 DB_HOST = '127.0.0.1'          # O túnel entrega localmente
-DB_PORT = 3307                 # Porta local usada no túnel
+DB_PORT = 3306                # Porta local usada no túnel
 DB_USER = 'rpgadmin'
 DB_PASSWORD = 'parrot'
 DB_NAME = 'rpg_manager'
@@ -16,7 +20,7 @@ DB_NAME = 'rpg_manager'
 SSH_HOST = '164.152.36.34'     # IP do servidor que aceita SSH
 SSH_PORT = 22
 SSH_USER = 'ubuntu'
-SSH_PKEY = 'id_rsa'  # Caminho da chave privada no backend
+SSH_PKEY = './id_rsa'  # Caminho da chave privada no backend
 
 def criar_conexao():
     # Cria o túnel SSH
@@ -44,7 +48,7 @@ def criar_conexao():
 
 
 """
-curl -k -X POST https://localhost:8443/cadastro \
+curl -k -X POST https://137.131.168.114:8443/cadastro \
 -H "Content-Type: application/json" \
 -d '{"email": "usuario@example.com", "senha": "minhasenha123"}'
 """
@@ -77,7 +81,7 @@ def cadastro():
         conn.ssh_tunnel.stop()
 
 """
-curl -k -X POST https://localhost:8443/login \
+curl -k -X POST https://137.131.168.114:8443/login \
 -H "Content-Type: application/json" \
 -d '{"email": "usuario@example.com", "senha": "minhasenha123"}'
 """
@@ -112,7 +116,7 @@ def login():
         conn.ssh_tunnel.stop()
 
 """
-curl -k -X POST https://localhost:8443/criar_mesa \
+curl -k -X POST https://137.131.168.114:8443/criar_mesa \
 -H "Content-Type: application/json" \
 -d '{"nome": "Mesa dos Aventureiros", "descricao": "Aventura no mundo de Eldoria", "criador_email": "usuario@example.com"}'
 """
@@ -156,7 +160,7 @@ def criar_mesa():
         conn.ssh_tunnel.stop()
 
 """
-curl -k -X POST https://localhost:8443/personagem \
+curl -k -X POST https://137.131.168.114:8443/personagem \
 -H "Content-Type: application/json" \
 -d '{
     "nome": "Arthas",
@@ -213,7 +217,7 @@ def criar_personagem():
 
 
 """
-curl -k https://localhost:8443/mesa/2
+curl -k https://137.131.168.114:8443/mesa/2
 """
 
 @app.route('/mesa/<int:id_mesa>', methods=['GET'])
@@ -247,7 +251,7 @@ def consultar_mesa(id_mesa):
         conn.ssh_tunnel.stop()
 
 """
-curl -k https://localhost:8443/personagem/2/usuario@example.com
+curl -k https://137.131.168.114:8443/personagem/2/usuario@example.com
 """
 
 @app.route('/personagem/<int:id_mesa>/<email>', methods=['GET'])
@@ -276,7 +280,7 @@ def consultar_personagem(id_mesa, email):
 
 
 """
-curl -k -X POST https://localhost:8443/participante \
+curl -k -X POST https://137.131.168.114:8443/participante \
 -H "Content-Type: application/json" \
 -d '{"usuario_email": "usuario@example.com", "id_mesa": 2}'
 """
@@ -317,7 +321,7 @@ def adicionar_participante():
         conn.ssh_tunnel.stop()
 
 """
-curl -k -X PUT https://localhost:8443/usuario/update \
+curl -k -X PUT https://137.131.168.114:8443/usuario/update \
 -H "Content-Type: application/json" \
 -d '{"email": "usuario@example.com", "senha": "novaSenha123"}'
 """
@@ -357,7 +361,7 @@ def atualizar_usuario():
         conn.ssh_tunnel.stop()
 
 """
-curl -k -X PUT https://localhost:8443/personagem/update \
+curl -k -X PUT https://137.131.168.114:8443/personagem/update \
 -H "Content-Type: application/json" \
 -d '{"email": "usuario@example.com", "id_mesa": 2, "nome": "NovoNome", "nivel": 5}'
 """
@@ -422,7 +426,7 @@ def atualizar_personagem():
         conn.ssh_tunnel.stop()
 
 """
-curl -k -X DELETE https://localhost:8443/expulsar \
+curl -k -X DELETE https://137.131.168.114:8443/expulsar \
 -H "Content-Type: application/json" \
 -d '{"nome": "NovoNome"}'
 """
@@ -472,7 +476,7 @@ def expulsar_jogador():
 
 
 """
-curl -k -X DELETE https://localhost:8443/mesa/2
+curl -k -X DELETE https://137.131.168.114:8443/mesa/2
 """
 @app.route('/mesa/<int:id_mesa>', methods=['DELETE'])
 def deletar_mesa(id_mesa):
