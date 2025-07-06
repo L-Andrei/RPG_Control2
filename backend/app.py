@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import pymysql.cursors
+import pymysql
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from sshtunnel import SSHTunnelForwarder
@@ -172,7 +172,7 @@ def obter_mesa():
 
     conn = criar_conexao()
     try:
-        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
+        with conn.cursor() as cursor:
             cursor.execute("""
                 SELECT id_mesa, nome, descricao
                 FROM mesa
