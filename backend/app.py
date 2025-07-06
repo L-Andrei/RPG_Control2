@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import pymysql.cursor
+import pymysql.cursors
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from sshtunnel import SSHTunnelForwarder
