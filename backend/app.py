@@ -1,5 +1,5 @@
 from flask import Flask, request, jsonify
-import pymysql
+import pymysql.cursor
 from flask_cors import CORS
 from werkzeug.security import generate_password_hash, check_password_hash
 from sshtunnel import SSHTunnelForwarder
@@ -172,7 +172,7 @@ def obter_mesa():
 
     conn = criar_conexao()
     try:
-        with conn.cursor(dictionary=True) as cursor:
+        with conn.cursor(pymysql.cursors.DictCursor) as cursor:
             cursor.execute("""
                 SELECT id_mesa, nome, descricao
                 FROM mesa
@@ -510,9 +510,9 @@ def expulsar_jogador():
 
 
 """
-curl -k -X DELETE https://137.131.168.114:8443/mesa/2
+curl -k -X DELETE https://137.131.168.114:8443/mesa/del/2
 """
-@app.route('/mesa/<int:id_mesa>', methods=['DELETE'])
+@app.route('/mesa/del/<int:id_mesa>', methods=['DELETE'])
 def deletar_mesa(id_mesa):
     conn = criar_conexao()
     try:
