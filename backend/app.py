@@ -20,7 +20,7 @@ DB_NAME = 'rpg_manager'
 SSH_HOST = '164.152.36.34'     # IP do servidor que aceita SSH
 SSH_PORT = 22
 SSH_USER = 'ubuntu'
-SSH_PKEY = './id_rsa'  # Caminho da chave privada no backend
+SSH_PKEY = 'ssh.key'  # Caminho da chave privada no backend
 
 def criar_conexao():
     # Cria o túnel SSH
