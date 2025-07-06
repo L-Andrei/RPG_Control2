@@ -158,6 +158,46 @@ def criar_mesa():
     finally:
         conn.close()
         conn.ssh_tunnel.stop()
+"""
+curl -X POST https://137.131.168.114:8433/get_mesa \
+  -H "Content-Type: application/json" \
+  -d '{"email": "joao@email.com"}'
+"""
+@app.route('/get_mesa', methods=['POST'])
+def get_mesa():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({'error': 'Email é obrigatório'}), 400
+
+    conn = criar_conexao()
+    try:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT id_mesa, nome, descricao, criador_email FROM mesa WHERE criador_email = %s", (email,))
+            mesas = cursor.fetchall()
+
+            if not mesas:
+                return jsonify({'message': 'Nenhuma mesa encontrada para este email'}), 404
+
+            # Transforma os resultados em uma lista de dicionários
+            mesas_formatadas = []
+            for mesa in mesas:
+                mesas_formatadas.append({
+                    'id_mesa': mesa[0],
+                    'nome': mesa[1],
+                    'descricao': mesa[2],
+                    'criador_email': mesa[3]
+                })
+
+            return jsonify(mesas_formatadas), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    finally:
+        conn.close()
+        conn.ssh_tunnel.stop()
+
 
 """
 curl -k -X POST https://137.131.168.114:8443/personagem \
