@@ -1,7 +1,3 @@
-/// ==========================================================
-/// ==========  explusar jogador  ============================
-/// ==========================================================
-
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formExpulsarJogador');
   const inputNome = document.getElementById('nomePersonagem');
@@ -43,6 +39,5 @@ document.addEventListener('DOMContentLoaded', () => {
     mensagemDiv.style.color = sucesso ? 'lightgreen' : 'salmon';
   }
 });
-
 
 
