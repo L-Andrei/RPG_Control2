@@ -685,6 +685,53 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+document.addEventListener('DOMContentLoaded', async () => {
+  // 🥇 1. Recuperar o e-mail salvo (via cookie ou localStorage)
+  let email = localStorage.getItem('email');
+
+  // Atualizar visualmente o email na página
+  const spanUserEmail = document.getElementById('userEmail');
+  if (email && spanUserEmail) {
+    spanUserEmail.textContent = email;
+  }
+
+  // 🥈 2. Enviar requisição para o back-end
+  if (!email) {
+    document.getElementById('mensagem').textContent = 'Usuário não logado.';
+    return;
+  }
+
+  try {
+    const res = await fetch('https://137.131.168.114:8433/obter_mesa', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    const data = await res.json();
+
+    const lista = document.getElementById('listaMesas');
+    const mensagem = document.getElementById('mensagem');
+
+    if (res.ok) {
+      mensagem.textContent = '';
+      lista.innerHTML = '';
+
+      data.forEach(mesa => {
+        const div = document.createElement('div');
+        div.innerHTML = `<h3>${mesa.nome}</h3><p>${mesa.descricao}</p>`;
+        lista.appendChild(div);
+      });
+
+    } else {
+      mensagem.textContent = data.message || data.error || 'Erro ao carregar mesas';
+    }
+  } catch (err) {
+    document.getElementById('mensagem').textContent = 'Erro ao conectar com o servidor.';
+    console.error(err);
+  }
+});
+
 
 
 

@@ -5,11 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sshtunnel import SSHTunnelForwarder
 
 app = Flask(__name__)
-CORS(app, supports_credentials=True, resources={r"/*": {
-    "origins": "*",
-    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    "allow_headers": ["Content-Type", "Authorization"]
-}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 DB_HOST = '127.0.0.1'          # O túnel entrega localmente
 DB_PORT = 3306                # Porta local usada no túnel
@@ -160,7 +156,7 @@ def criar_mesa():
 """
 curl -k -X POST https://137.131.168.114:8443/obter_mesa \
   -H "Content-Type: application/json" \
-  -d '{"email": "usuario@example.com"}'
+  -d '{"email": "lucasteste@gmail.com"}'
 """
 @app.route('/obter_mesa', methods=['POST'])
 def obter_mesa():
