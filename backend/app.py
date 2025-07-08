@@ -351,6 +351,43 @@ def adicionar_participante():
         conn.ssh_tunnel.stop()
 
 """
+curl -k -X POST https://137.131.168.114:8443/listar_mesas_participante \
+  -H "Content-Type: application/json" \
+  -d '{"email": "lucasteste@gmail.com"}'
+"""
+
+@app.route('/listar_mesas_participante', methods=['POST'])
+def listar_mesas_participante():
+    data = request.get_json()
+    email = data.get('email')
+
+    if not email:
+        return jsonify({'error': 'E-mail é obrigatório'}), 400
+
+    conn = criar_conexao()
+    try:
+        with conn.cursor(dictionary=True) as cursor:
+            cursor.execute("""
+                SELECT m.id_mesa, m.nome, m.descricao
+                FROM participante_mesa pm
+                JOIN mesa m ON pm.id_mesa = m.id_mesa
+                WHERE pm.usuario_email = %s
+            """, (email,))
+            mesas = cursor.fetchall()
+
+            if not mesas:
+                return jsonify({'message': 'Nenhuma mesa encontrada para este participante'}), 404
+
+        return jsonify(mesas), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+    finally:
+        conn.close()
+        conn.ssh_tunnel.stop()
+
+"""
 curl -k -X PUT https://137.131.168.114:8443/usuario/update \
 -H "Content-Type: application/json" \
 -d '{"email": "usuario@example.com", "senha": "novaSenha123"}'
