@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   try {
-    const res = await fetch('https://137.131.168.114:8433/obter_mesa', {
+    const res = await fetch('https://137.131.168.114:8443/obter_mesa', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email }),
