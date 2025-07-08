@@ -136,7 +136,6 @@
   <nav>
     <a href="criar_mesa.html">Criar Mesa</a>
     <a href="obter_mesa.html">Listar Mesas</a>
-    <a href="deletar_mesa.html">Deletar Mesa</a>
     <a href="participante.html">Participante</a>
     <a href="atualizar_usuario.html">Atualizar Usuário</a>
   </nav>
@@ -152,5 +151,26 @@
     <p>&copy; 2025 RPG Manager. Todos os direitos reservados.</p>
   </footer>
   <script src="script.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const logoutBtn = document.getElementById('logout');
+
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', function () {
+        // Debug
+        console.log("Botão 'Sair' clicado");
+
+        // Limpar localStorage
+        localStorage.clear();
+
+        // Redirecionar para a tela de login
+        window.location.href = 'index.html';
+      });
+    } else {
+      console.warn("Botão de logout não encontrado no DOM");
+    }
+  });
+</script>
+
 </body>
 </html>
