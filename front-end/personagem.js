@@ -22,8 +22,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Coleta os dados do formulário
     const nome = document.getElementById('nome').value.trim();
     const classe = document.getElementById('classe').value.trim();
-    const usuario_email = document.getElementById('usuario_email').value.trim();
-    const id_mesa = parseInt(document.getElementById('id_mesa').value, 10);
+    const usuario_email = localStorage.getItem('email');
+    const id_mesa = parseInt(localStorage.getItem('mesaJogador'));
 
     // Monta o payload
     const payload = { nome, classe, usuario_email, id_mesa };
@@ -80,8 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     mensagem.style.color = '#555';
 
     // Coleta dados do formulário
-    const email = document.getElementById('email').value;
-    const id_mesa = parseInt(document.getElementById('id_mesa').value, 10);
+    const email = localStorage.getItem('email');
+    const id_mesa = parseInt(localStorage.getItem('mesaJogador'));
     const nome = document.getElementById('nome').value;
     const classe = document.getElementById('classe').value;
     const nivelInput = document.getElementById('nivel').value;
