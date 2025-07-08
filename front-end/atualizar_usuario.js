@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const email = document.getElementById('email').value.trim();
+    const email = localStorage.getItem('email');
     const senha = document.getElementById('novaSenha').value;
 
     if (!email || !senha) {
