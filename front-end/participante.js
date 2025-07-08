@@ -6,7 +6,7 @@
 // === Participante: adicionar na API ===
 function initAdicionarParticipante() {
   const form = document.getElementById('participanteForm');
-  const emailInput = document.getElementById('emailInput');
+  const emailInput = localStorage.getItem('email');
   const idMesaInput = document.getElementById('idMesaInput');
   const msgDiv = document.getElementById('message');
   console.log("giovani");
@@ -17,7 +17,7 @@ function initAdicionarParticipante() {
     msgDiv.textContent = '';             // limpa mensagem anterior
     msgDiv.style.color = '';             // reseta cor
 
-    const usuario_email = emailInput.value.trim();
+    const usuario_email = emailInput;
     const id_mesa        = idMesaInput.value;
 
     // validação simples
