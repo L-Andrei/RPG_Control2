@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Adicionar Participante - RPG Manager</title>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --bg-light: #f4f6f8;
+      --bg-card: #ffffff;
+      --text-primary: #2c3e50;
+      --text-secondary: #555;
+      --border-radius: 8px;
+      --spacing: 1rem;
+      --transition-speed: 0.3s;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    header {
+      background: var(--bg-card);
+      padding: var(--spacing);
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: sticky; top: 0; z-index: 10;
+    }
+    header h1 {
+      font-size: 1.8rem;
+    }
+    nav {
+      background: var(--bg-card);
+      display: flex; flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: var(--spacing);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    nav a {
+      background: var(--primary-color);
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 600;
+      transition: background var(--transition-speed);
+    }
+    nav a:hover { background: var(--secondary-color); }
+    main {
+      max-width: 600px;
+      margin: calc(var(--spacing)*2) auto;
+      padding: var(--spacing);
+    }
+    .card {
+      background: var(--bg-card);
+      padding: calc(var(--spacing)*1.5);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .card h2 {
+      margin-bottom: var(--spacing);
+      color: var(--primary-color);
+      font-size: 1.5rem;
+    }
+    form label {
+      display: block;
+      margin-top: var(--spacing);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    input, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    input { background: #fafafa; }
+    button {
+      background: var(--primary-color);
+      color: #fff;
+      border: none;
+      margin-top: var(--spacing);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background var(--transition-speed);
+    }
+    button:hover { background: var(--secondary-color); }
+    #message {
+      margin-top: var(--spacing);
+      text-align: center;
+      color: var(--text-secondary);
+    }
+    footer {
+      text-align: center;
+      padding: var(--spacing);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      border-top: 1px solid #ddd;
+      margin-top: calc(var(--spacing)*2);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Adicionar Participante</h1>
+  </header>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="criar_mesa.html">Criar Mesa</a>
+    <a href="obter_mesa.html">Listar Mesas</a>
+    <a href="mesa.html">Mesa Detalhes</a>
+    <a href="deletar_mesa.html">Deletar Mesa</a>
+    <a href="personagem.html">Personagem</a>
+    <a href="participante.html">Participante</a>
+    <a href="atualizar_usuario.html">Atualizar Usuário</a>
+    <a href="expulsar_jogador.html">Expulsar Jogador</a>
+  </nav>
+  <main>
+    <div class="card">
+      <h2>Formulário de Participante</h2>
+      <form id="participanteForm">
+        <label for="emailInput">Email do Usuário</label>
+        <input type="email" id="emailInput" placeholder="usuario@example.com" required />
+
+        <label for="idMesaInput">ID da Mesa</label>
+        <input type="number" id="idMesaInput" placeholder="1" required />
+
+        <button type="submit">Adicionar</button>
+      </form>
+      <div id="message"></div>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2025 RPG Manager. Todos os direitos reservados.</p>
+  </footer>
+  <script src="script.js" defer></script>
+</body>
+</html>

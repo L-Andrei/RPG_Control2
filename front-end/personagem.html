@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Criar Personagem - RPG Manager</title>
+  <style>
+    /* Cores adaptadas ao estilo claro */
+    :root {
+      --primary-color: #3498db;
+      --primary-hover: #2980b9;
+      --secondary-color: #2ecc71;
+      --bg-light: #f4f6f8;
+      --bg-card: #ffffff;
+      --text-color: #333333;
+      --input-bg: #ffffff;
+      --input-border: #cccccc;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-color);
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      background-color: var(--bg-card);
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid var(--input-border);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: var(--text-color);
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background-color: var(--bg-card);
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--input-border);
+    }
+    nav a {
+      color: #ffffff;
+      background-color: var(--primary-color);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    nav a:hover {
+      background-color: var(--primary-hover);
+    }
+
+    main {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .card {
+      background-color: var(--bg-card);
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 2rem;
+    }
+    .card h2 {
+      margin: 0 0 1rem 0;
+      color: var(--primary-color);
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.5rem;
+      border: 1px solid var(--input-border);
+      border-radius: 4px;
+      background-color: var(--input-bg);
+      color: var(--text-color);
+      box-sizing: border-box;
+    }
+    input::placeholder {
+      color: #888888;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 1.5rem;
+      padding: 0.75rem;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .message {
+      margin-top: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .success {
+      color: var(--secondary-color);
+    }
+    .error {
+      color: red;
+    }
+
+    a.update-link {
+      display: inline-block;
+      margin: 0 0 1rem 0;
+      background-color: var(--primary-color);
+      color: #ffffff;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+    a.update-link:hover {
+      background-color: var(--primary-hover);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Criar Novo Personagem</h1>
+  </header>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="criar_mesa.html">Criar Mesa</a>
+    <a href="obter_mesa.html">Listar Mesas</a>
+    <a href="mesa.html">Detalhes da Mesa</a>
+    <a href="deletar_mesa.html">Deletar Mesa</a>
+    <a href="personagem.html">Personagem</a>
+    <a href="participante.html">Participante</a>
+    <a href="atualizar_usuario.html">Atualizar Usuário</a>
+    <a href="expulsar_jogador.html">Expulsar Jogador</a>
+  </nav>
+  <main>
+    <div class="card">
+      <h2>Formulário de Personagem</h2>
+      <a href="personagem_update.html" class="update-link">Atualizar Personagem</a>
+      <form id="form-personagem">
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" placeholder="Digite o nome" required>
+
+        <label for="classe">Classe:</label>
+        <input type="text" id="classe" placeholder="Digite a classe" required>
+
+        <label for="usuario_email">Email do Usuário:</label>
+        <input type="email" id="usuario_email" placeholder="usuario@example.com" required>
+
+        <label for="id_mesa">ID da Mesa:</label>
+        <input type="number" id="id_mesa" placeholder="1" required>
+
+        <button type="submit">Criar Personagem</button>
+        <div id="message" class="message"></div>
+      </form>
+    </div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

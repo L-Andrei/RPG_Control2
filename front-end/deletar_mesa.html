@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard - RPG Manager</title>
+  <style>
+
+      table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 0.75rem; border: 1px solid #ccc; text-align: left; }
+    th { background: #e0e0e0; }
+    button.delete { background: #d9534f; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --bg-light: #f4f6f8;
+      --bg-card: #ffffff;
+      --text-primary: #2c3e50;
+      --text-secondary: #555;
+      --border-radius: 8px;
+      --spacing: 1rem;
+      --transition-speed: 0.3s;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+    header {
+      background: var(--bg-card);
+      padding: var(--spacing);
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+    header p {
+      color: var(--text-secondary);
+    }
+    nav {
+      background: var(--bg-card);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: var(--spacing);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    nav a {
+      display: inline-block;
+      text-decoration: none;
+      background: var(--primary-color);
+      color: #fff;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      transition: background var(--transition-speed), transform var(--transition-speed);
+    }
+    nav a:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+    main {
+      max-width: 960px;
+      margin: calc(var(--spacing) * 2) auto;
+      padding: var(--spacing);
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      min-height: 400px;
+      position: relative;
+    }
+    /* Contêiner para título */
+    .main-header h2 {
+      margin-bottom: var(--spacing);
+    }
+    /* Botão sair posicionado no canto inferior esquerdo de main */
+    #logout {
+      position: absolute;
+      bottom: var(--spacing);
+      left: var(--spacing);
+      background: #e74c3c;
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius);
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: background var(--transition-speed), transform var(--transition-speed);
+    }
+    #logout:hover {
+      background: #c0392b;
+      transform: translateY(-2px);
+    }
+    #conteudo p {
+      margin-bottom: 1rem;
+    }
+    footer {
+      text-align: center;
+      padding: var(--spacing);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      border-top: 1px solid #ddd;
+      margin-top: calc(var(--spacing) * 2);
+    }
+    @media (max-width: 600px) {
+      nav a {
+        flex: 1 1 100%;
+        text-align: center;
+      }
+      main {
+        margin: var(--spacing);
+        padding: var(--spacing);
+      }
+      #logout {
+        position: static;
+        margin-top: var(--spacing);
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>RPG Manager</h1>
+    <p id="bemVindo">Bem-vindo, <span id="userEmail">usuário@example.com</span></p>
+  </header>
+  <nav>
+    <a href="criar_mesa.html">Criar Mesa</a>
+    <a href="obter_mesa.html">Listar Mesas</a>
+    <a href="mesa.html">Mesa Detalhes</a>
+    <a href="deletar_mesa.html">Deletar Mesa</a>
+    <a href="personagem.html">Personagem</a>
+    <a href="participante.html">Participante</a>
+    <a href="atualizar_usuario.html">Atualizar Usuário</a>
+    <a href="expulsar_jogador.html">Expulsar Jogador</a>
+  </nav>
+  <main id="conteudo">
+    
+
+  <h1>Deletar Mesas</h1>
+
+  <table id="mesasTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Preenchido pelo script.js -->
+    </tbody>
+  </table>
+
+  <div id="message" class="message"></div>
+
+  </main>
+  <footer>
+    <p>&copy; 2025 RPG Manager. Todos os direitos reservados.</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,170 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Criar Mesa - RPG Manager</title>
+  <style>
+    /* Variáveis de tema claro */
+    :root {
+      --primary-color: #3498db;
+      --primary-hover: #2980b9;
+      --secondary-color: #2ecc71;
+      --bg-light: #f4f6f8;
+      --bg-card: #ffffff;
+      --text-color: #2c3e50;
+      --text-secondary: #555555;
+      --input-bg: #ffffff;
+      --input-border: #cccccc;
+      --border-radius: 8px;
+      --spacing: 1rem;
+      --transition-speed: 0.3s;
+      --box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+    header {
+      background: var(--bg-card);
+      padding: var(--spacing);
+      text-align: center;
+      box-shadow: var(--box-shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header h1 {
+      font-size: 2rem;
+      color: var(--text-color);
+    }
+    nav {
+      background: var(--bg-card);
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 0.75rem;
+      box-shadow: var(--box-shadow);
+    }
+    nav a {
+      text-decoration: none;
+      background: var(--primary-color);
+      color: #ffffff;
+      padding: 0.6rem 1.2rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      transition: background var(--transition-speed), transform var(--transition-speed);
+    }
+    nav a:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+    }
+    main {
+      max-width: 800px;
+      margin: calc(var(--spacing) * 2) auto;
+      padding: var(--spacing);
+      background: var(--bg-card);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+    }
+    .card {
+      padding: var(--spacing);
+    }
+    .card h2 {
+      margin-bottom: var(--spacing);
+      color: var(--primary-color);
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+      color: var(--text-color);
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 4px;
+      font-size: 1rem;
+      box-sizing: border-box;
+      border: 1px solid var(--input-border);
+    }
+    input, textarea {
+      background: var(--input-bg);
+      color: var(--text-color);
+    }
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+    button {
+      background: var(--primary-color);
+      color: #ffffff;
+      border: none;
+      margin-top: var(--spacing);
+      cursor: pointer;
+      font-weight: 600;
+      transition: background var(--transition-speed);
+    }
+    button:hover {
+      background: var(--primary-hover);
+    }
+    .loading {
+      color: var(--primary-color);
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+    footer {
+      text-align: center;
+      padding: var(--spacing);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      border-top: 1px solid #ddd;
+      margin-top: calc(var(--spacing) * 2);
+    }
+    @media (max-width: 600px) {
+      nav a { flex: 1 1 100%; text-align: center; }
+      main { margin: var(--spacing); padding: var(--spacing); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Criar Mesa</h1>
+  </header>
+  <nav>
+    <a href="dashboard.html">Dashboard</a>
+  </nav>
+  <main>
+    <div class="card">
+      <h2>Criar Nova Mesa</h2>
+      <form id="form-criar-mesa">
+        <label for="nomeMesa">Nome da Mesa:</label>
+        <input type="text" id="nomeMesa" name="nomeMesa" placeholder="Digite o nome da mesa" required>
+
+        <label for="descricao">Descrição:</label>
+        <textarea id="descricao" name="descricao" placeholder="Descreva a mesa..." required></textarea>
+
+        <button type="submit">Criar Mesa</button>
+      </form>
+      <div id="mensagemMesa"></div>
+      <div id="loading" class="loading" style="display: none;">Carregando...</div>
+      <ul id="listaMesas"></ul>
+    </div>
+  </main>
+  <footer>
+    <p>&copy; 2025 RPG Manager. Todos os direitos reservados.</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
