@@ -5,7 +5,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sshtunnel import SSHTunnelForwarder
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+CORS(app)
 
 DB_HOST = '127.0.0.1'          # O túnel entrega localmente
 DB_PORT = 3306                # Porta local usada no túnel
