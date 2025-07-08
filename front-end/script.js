@@ -220,76 +220,71 @@ async function consultarMesa(event) {
 /// ==========================================================
 /// ==========  MESA   - MESA DETALHADA ======================
 /// ==========================================================
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const API_BASE = 'https://137.131.168.114:8443';  // seu host+porta
-  const form = document.getElementById('consultarMesaForm');
   const mensagemEl = document.getElementById('mensagem');
   const resultadoEl = document.getElementById('resultado');
-  const buscarBtn = form.querySelector('button[type="submit"]');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+  // Obter o ID da mesa do localStorage, priorizando mesaMestre
+  const mesaId = localStorage.getItem('mesaMestre') || localStorage.getItem('mesaJogador');
+  if (!mesaId) {
+    mensagemEl.textContent = '❌ Nenhum ID de mesa encontrado no localStorage.';
+    mensagemEl.style.color = '#e74c3c';
+    return;
+  }
 
-    const mesaId = document.getElementById('mesaId').value.trim();
-    if (!mesaId) return;
+  mensagemEl.textContent = 'Carregando informações…';
+  mensagemEl.style.color = 'var(--text-secondary)';
+  resultadoEl.innerHTML = '';
 
-    mensagemEl.textContent = 'Carregando informações…';
-    mensagemEl.style.color = 'var(--text-secondary)';
-    resultadoEl.innerHTML = '';
-    buscarBtn.disabled = true;
+  try {
+    console.log(`🛰️ Fazendo GET em ${API_BASE}/mesa/${mesaId}`);
+    const response = await fetch(`${API_BASE}/mesa/${encodeURIComponent(mesaId)}`, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+      mode: 'cors',
+      // credentials: 'include' // descomente se precisar enviar cookies
+    });
 
+    console.log('Status HTTP:', response.status);
+    const texto = await response.text();
+    console.log('Resposta bruta:', texto);
+
+    let data;
     try {
-      console.log(`🛰️ Fazendo GET em ${API_BASE}/mesa/${mesaId}`);
-      const response = await fetch(`${API_BASE}/mesa/${encodeURIComponent(mesaId)}`, {
-        method: 'GET',
-        headers: { 'Accept': 'application/json' },
-        mode: 'cors',            // se precisar
-        // credentials: 'include' // se precisar enviar cookies
-      });
-
-      console.log('Status HTTP:', response.status);
-      const texto = await response.text();
-      console.log('Resposta bruta:', texto);
-
-      let data;
-      try {
-        data = JSON.parse(texto);
-      } catch {
-        throw new Error('Resposta não é JSON válido');
-      }
-
-      if (!response.ok) {
-        const msg = data.error || response.statusText;
-        throw new Error(msg);
-      }
-
-      // OK!
-      mensagemEl.textContent = '✅ Sucesso! Personagens encontrados:';
-      mensagemEl.style.color = 'var(--secondary-color)';
-
-      if (Array.isArray(data.personagens) && data.personagens.length > 0) {
-        const ul = document.createElement('ul');
-        data.personagens.forEach(p => {
-          const li = document.createElement('li');
-          li.textContent = `ID: ${p.id_personagem} — ${p.nome} (Classe: ${p.classe}, Nível: ${p.nivel})`;
-          ul.appendChild(li);
-        });
-        resultadoEl.appendChild(ul);
-      } else {
-        resultadoEl.textContent = 'Nenhum personagem associado a esta mesa.';
-      }
-
-    } catch (err) {
-      console.error(err);
-      mensagemEl.textContent = `❌ Erro ao consultar mesa: ${err.message}`;
-      mensagemEl.style.color = '#e74c3c';
-    } finally {
-      buscarBtn.disabled = false;
+      data = JSON.parse(texto);
+    } catch {
+      throw new Error('Resposta não é JSON válido');
     }
-  });
-});
 
+    if (!response.ok) {
+      const msg = data.error || response.statusText;
+      throw new Error(msg);
+    }
+
+    // OK!
+    mensagemEl.textContent = '✅ Sucesso! Personagens encontrados:';
+    mensagemEl.style.color = 'var(--secondary-color)';
+
+    if (Array.isArray(data?.personagens) && data.personagens.length > 0) {
+      const ul = document.createElement('ul');
+      data.personagens.forEach(p => {
+        const li = document.createElement('li');
+        li.textContent = `ID: ${p.id_personagem} — ${p.nome} (Classe: ${p.classe}, Nível: ${p.nivel})`;
+        ul.appendChild(li);
+      });
+      resultadoEl.appendChild(ul);
+    } else {
+      resultadoEl.textContent = 'Nenhum personagem associado a esta mesa.';
+      console.warn('⚠️ Nenhum personagem encontrado ou resposta malformada:', data);
+    }
+
+  } catch (err) {
+    console.error(err);
+    mensagemEl.textContent = `❌ Erro ao consultar mesa: ${err.message}`;
+    mensagemEl.style.color = '#e74c3c';
+  }
+});
 
 
 /// ==========================================================
@@ -402,7 +397,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // === Participante: adicionar na API ===
 function initAdicionarParticipante() {
   const form = document.getElementById('participanteForm');
-  const emailInput = document.getElementById('emailInput');
   const idMesaInput = document.getElementById('idMesaInput');
   const msgDiv = document.getElementById('message');
   console.log("giovani");
@@ -413,7 +407,7 @@ function initAdicionarParticipante() {
     msgDiv.textContent = '';             // limpa mensagem anterior
     msgDiv.style.color = '';             // reseta cor
 
-    const usuario_email = emailInput.value.trim();
+    const usuario_email = localStorage.getItem('email');
     const id_mesa        = idMesaInput.value;
 
     // validação simples
@@ -561,15 +555,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-
-
-
-
 /// ==========================================================
 /// ========== criar personagem   ============================
 /// ==========================================================
-
-
 
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -589,8 +577,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Coleta os dados do formulário
     const nome = document.getElementById('nome').value.trim();
     const classe = document.getElementById('classe').value.trim();
-    const usuario_email = document.getElementById('usuario_email').value.trim();
-    const id_mesa = parseInt(document.getElementById('id_mesa').value, 10);
+    const usuario_email = localStorage.getItem('email');
+    const id_mesa = localStorage.getItem('mesaJogador');
 
     // Monta o payload
     const payload = { nome, classe, usuario_email, id_mesa };
@@ -626,7 +614,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-
 /// ==========================================================
 /// ========== personagem atualizar ==========================
 /// ==========================================================
@@ -647,8 +634,8 @@ document.addEventListener('DOMContentLoaded', () => {
     mensagem.style.color = '#555';
 
     // Coleta dados do formulário
-    const email = document.getElementById('email').value;
-    const id_mesa = parseInt(document.getElementById('id_mesa').value, 10);
+    const email = localStorage.getItem('email');
+    const id_mesa = localStorage.getItem('mesaJogador');
     const nome = document.getElementById('nome').value;
     const classe = document.getElementById('classe').value;
     const nivelInput = document.getElementById('nivel').value;
@@ -685,86 +672,121 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-document.addEventListener('DOMContentLoaded', async () => {
-  // 🥇 1. Recuperar o e-mail salvo (via cookie ou localStorage)
-  let email = localStorage.getItem('email');
+document.addEventListener("DOMContentLoaded", () => {
+  const email = localStorage.getItem("email");
+  const userEmailSpan = document.getElementById("userEmail");
+  const mensagemDiv = document.getElementById("mensagem");
+  const listaMesasDiv = document.getElementById("listaMesas");
+  const listaParticipanteDiv = document.getElementById("listaParticipante");
 
-  // Atualizar visualmente o email na página
-  const spanUserEmail = document.getElementById('userEmail');
-  if (email && spanUserEmail) {
-    spanUserEmail.textContent = email;
-  }
-
-  // 🥈 2. Enviar requisição para o back-end
   if (!email) {
-    document.getElementById('mensagem').textContent = 'Usuário não logado.';
+    mensagemDiv.textContent = "E-mail do usuário não encontrado.";
     return;
   }
 
-  try {
-    const res = await fetch('https://137.131.168.114:8433/obter_mesa', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
+  userEmailSpan.textContent = email;
+
+  const criarCardMesa = (mesa, tipo) => {
+    const card = document.createElement("div");
+    card.style.border = "1px solid #ccc";
+    card.style.borderRadius = "8px";
+    card.style.padding = "1rem";
+    card.style.marginBottom = "1rem";
+    card.style.backgroundColor = "#fdfdfd";
+
+    const titulo = document.createElement("h3");
+    titulo.textContent = mesa.nome;
+
+    const descricao = document.createElement("p");
+    descricao.textContent = mesa.descricao || "";
+
+    const id = document.createElement("p");
+    id.innerHTML = `<strong>ID:</strong> ${mesa.id_mesa}`;
+
+    const botaoIr = document.createElement("button");
+    botaoIr.textContent = "Ir para a mesa";
+    botaoIr.style.marginTop = "0.5rem";
+
+    botaoIr.addEventListener("click", () => {
+      if (tipo === "mestre") {
+        localStorage.setItem("mesaMestre", mesa.id_mesa);
+        window.location.href = "mesa_mestre.html";
+      } else if (tipo === "participante") {
+        localStorage.setItem("mesaJogador", mesa.id_mesa);
+        window.location.href = "mesa_jogador.html";
+      }
     });
 
-    const data = await res.json();
+    card.appendChild(titulo);
+    card.appendChild(descricao);
+    card.appendChild(id);
+    card.appendChild(botaoIr);
 
-    const lista = document.getElementById('listaMesas');
-    const mensagem = document.getElementById('mensagem');
+    return card;
+  };
 
-    if (res.ok) {
-      mensagem.textContent = '';
-      lista.innerHTML = '';
+  const listarMesas = async () => {
+    mensagemDiv.textContent = "Carregando mesas...";
 
-      data.forEach(mesa => {
-        const div = document.createElement('div');
-        div.innerHTML = `<h3>${mesa.nome}</h3><p>${mesa.descricao}</p>`;
-        lista.appendChild(div);
-      });
+    try {
+      const [resMestre, resParticipante] = await Promise.all([
+        fetch("https://137.131.168.114:8443/obter_mesa", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }),
+        fetch("https://137.131.168.114:8443/listar_mesas_participante", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email }),
+        }),
+      ]);
 
-    } else {
-      mensagem.textContent = data.message || data.error || 'Erro ao carregar mesas';
+      let mesasMestre = [];
+      if (resMestre.ok) {
+        mesasMestre = await resMestre.json();
+      } else if (resMestre.status === 404) {
+        mesasMestre = [];
+      } else {
+        throw new Error("Erro ao carregar mesas como mestre");
+      }
+
+      let mesasParticipante = [];
+      if (resParticipante.ok) {
+        mesasParticipante = await resParticipante.json();
+      } else if (resParticipante.status === 404) {
+        mesasParticipante = [];
+      } else {
+        throw new Error("Erro ao carregar mesas como participante");
+      }
+
+      // Limpa mensagem de carregamento para não remover o elemento, só limpar texto
+      mensagemDiv.textContent = "";
+
+      // Limpa listas antes de preencher (importante para evitar duplicatas se listarMesas rodar novamente)
+      listaMesasDiv.textContent = "";
+      listaParticipanteDiv.textContent = "";
+
+      if (mesasMestre.length === 0) {
+        listaMesasDiv.textContent = "Nenhuma mesa como mestre encontrada.";
+      } else {
+        mesasMestre.forEach((mesa) => {
+          listaMesasDiv.appendChild(criarCardMesa(mesa, "mestre"));
+        });
+      }
+
+      if (mesasParticipante.length === 0) {
+        listaParticipanteDiv.textContent = "Nenhuma mesa como participante encontrada.";
+      } else {
+        mesasParticipante.forEach((mesa) => {
+          listaParticipanteDiv.appendChild(criarCardMesa(mesa, "participante"));
+        });
+      }
+    } catch (error) {
+      mensagemDiv.textContent = "Erro ao carregar mesas.";
+      console.error(error);
     }
-  } catch (err) {
-    document.getElementById('mensagem').textContent = 'Erro ao conectar com o servidor.';
-    console.error(err);
-  }
+  };
+
+  listarMesas();
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

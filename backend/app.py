@@ -366,7 +366,7 @@ def listar_mesas_participante():
 
     conn = criar_conexao()
     try:
-        with conn.cursor(dictionary=True) as cursor:
+        with conn.cursor() as cursor:
             cursor.execute("""
                 SELECT m.id_mesa, m.nome, m.descricao
                 FROM participante_mesa pm

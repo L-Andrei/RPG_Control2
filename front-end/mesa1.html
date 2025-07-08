@@ -8,8 +8,6 @@
     :root {
       --primary-color: #3498db;
       --secondary-color: #2ecc71;
-      --danger-color: #e74c3c;
-      --danger-hover: #c0392b;
       --bg-light: #f4f6f8;
       --bg-card: #ffffff;
       --text-primary: #2c3e50;
@@ -18,20 +16,17 @@
       --spacing: 1rem;
       --transition-speed: 0.3s;
     }
-
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
     }
-
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: var(--bg-light);
       color: var(--text-primary);
       line-height: 1.6;
     }
-
     header {
       background: var(--bg-card);
       padding: var(--spacing);
@@ -41,43 +36,39 @@
       top: 0;
       z-index: 100;
     }
-
     header h1 {
       font-size: 2rem;
+      margin-bottom: 0.5rem;
     }
-
     header p {
       color: var(--text-secondary);
     }
-
     nav {
       background: var(--bg-card);
       display: flex;
-      flex-wrap: wrap;
       justify-content: center;
+      flex-wrap: wrap;
       gap: 0.5rem;
       padding: var(--spacing);
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
     }
-
     nav a {
+      display: inline-block;
+      text-decoration: none;
       background: var(--primary-color);
       color: #fff;
-      text-decoration: none;
       padding: 0.6rem 1.2rem;
       border-radius: var(--border-radius);
       font-weight: 600;
       transition: background var(--transition-speed), transform var(--transition-speed);
     }
-
     nav a:hover {
       background: var(--secondary-color);
       transform: translateY(-2px);
     }
-
     main {
       max-width: 960px;
-      margin: 2rem auto;
+      margin: calc(var(--spacing) * 2) auto;
       padding: var(--spacing);
       background: var(--bg-card);
       border-radius: var(--border-radius);
@@ -85,58 +76,14 @@
       min-height: 400px;
       position: relative;
     }
-
     .main-header h2 {
       margin-bottom: var(--spacing);
     }
-
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      max-width: 400px;
-      margin: 1rem auto;
-    }
-
-    label {
-      font-weight: 600;
-    }
-
-    input {
-      padding: 0.6rem;
-      border: 1px solid #ccc;
-      border-radius: var(--border-radius);
-      font-size: 1rem;
-      transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
-    }
-
-    input:focus {
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-      outline: none;
-    }
-
-    button[type="submit"] {
-      background: var(--primary-color);
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: var(--border-radius);
-      cursor: pointer;
-      font-weight: 600;
-      transition: background var(--transition-speed), transform var(--transition-speed);
-    }
-
-    button[type="submit"]:hover {
-      background: var(--secondary-color);
-      transform: translateY(-2px);
-    }
-
     #logout {
       position: absolute;
       bottom: var(--spacing);
       left: var(--spacing);
-      background: var(--danger-color);
+      background: #e74c3c;
       color: #fff;
       border: none;
       padding: 0.6rem 1.2rem;
@@ -146,18 +93,13 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
       transition: background var(--transition-speed), transform var(--transition-speed);
     }
-
     #logout:hover {
-      background: var(--danger-hover);
+      background: #c0392b;
       transform: translateY(-2px);
     }
-
-    #mensagem {
-      text-align: center;
-      margin-top: 1rem;
-      font-weight: bold;
+    #conteudo p {
+      margin-bottom: 1rem;
     }
-
     footer {
       text-align: center;
       padding: var(--spacing);
@@ -165,23 +107,30 @@
       color: var(--text-secondary);
       font-size: 0.9rem;
       border-top: 1px solid #ddd;
-      margin-top: 2rem;
+      margin-top: calc(var(--spacing) * 2);
     }
-
     @media (max-width: 600px) {
       nav a {
         flex: 1 1 100%;
         text-align: center;
       }
-
       main {
         margin: var(--spacing);
+        padding: var(--spacing);
       }
-
       #logout {
         position: static;
         margin-top: var(--spacing);
+        transform: none;
       }
+    }
+    /* Estilo básico para cards de personagem */
+    .card {
+      background: var(--bg-light);
+      border: 1px solid #ddd;
+      border-radius: var(--border-radius);
+      padding: var(--spacing);
+      margin-bottom: var(--spacing);
     }
   </style>
 </head>
@@ -190,33 +139,20 @@
     <h1>RPG Manager</h1>
     <p id="bemVindo">Bem-vindo, <span id="userEmail">usuário@example.com</span></p>
   </header>
-
-  <nav aria-label="Menu de navegação principal">
-    <a href="dashboard.html">Dashboard</a>
+  <nav>
+    <a href="mesa_mestre.html">Voltar</a>
   </nav>
-
   <main id="conteudo">
-    <section class="main-header" aria-labelledby="titulo-form">
-      <h2 id="titulo-form">Atualizar Senha</h2>
-      <form id="formAtualizarUsuario">
-        <label for="email">Email</label>
-        <input type="email" id="email" placeholder="Digite seu email" required />
+    <h1>Consultar personagem na mesa</h1>
+    <p>Se a mesa existir, retorna os personagens associados.</p>
+    <div id="mensagem" style="margin-top:1rem; font-weight:600;"></div>
+    <div id="resultado" style="margin-top:1rem;"></div>
 
-        <label for="novaSenha">Nova Senha</label>
-        <input type="password" id="novaSenha" placeholder="Digite a nova senha" required />
-
-        <button type="submit">Atualizar</button>
-      </form>
-      <div id="mensagem" role="status" aria-live="polite"></div>
-    </section>
-
-    <button id="logout">Sair</button>
   </main>
-
   <footer>
     <p>&copy; 2025 RPG Manager. Todos os direitos reservados.</p>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>
+
