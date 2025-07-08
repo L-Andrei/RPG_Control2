@@ -4,6 +4,8 @@
 
 
 // === Participante: adicionar na API ===
+const API_BASE = 'https://137.131.168.114:8433'; // ajuste a URL da sua API
+
 function initAdicionarParticipante() {
   const form = document.getElementById('participanteForm');
   const idMesaInput = document.getElementById('idMesaInput');
@@ -11,14 +13,13 @@ function initAdicionarParticipante() {
   if (!form) return;
 
   form.addEventListener('submit', async e => {
-    e.preventDefault();
-    msgDiv.textContent = '';             // limpa mensagem anterior
-    msgDiv.style.color = '';             // reseta cor
+    e.preventDefault(); // evita reload da página
+    msgDiv.textContent = '';
+    msgDiv.style.color = '';
 
     const usuario_email = localStorage.getItem('email');
-    const id_mesa        = idMesaInput.value;
+    const id_mesa = idMesaInput.value;
 
-    // validação simples
     if (!usuario_email || !id_mesa) {
       msgDiv.textContent = 'Preencha todos os campos.';
       msgDiv.style.color = 'red';
@@ -38,14 +39,15 @@ function initAdicionarParticipante() {
         msgDiv.style.color = 'green';
         form.reset();
       } else {
-        // trata erros 4xx/5xx
         msgDiv.textContent = data.error || 'Erro ao adicionar participante.';
         msgDiv.style.color = 'red';
       }
     } catch (err) {
-      // erro de rede ou CORS
       msgDiv.textContent = 'Erro de conexão: ' + err.message;
       msgDiv.style.color = 'red';
     }
   });
 }
+
+// Chame a função para ativar o listener
+initAdicionarParticipante();
