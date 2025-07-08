@@ -3,9 +3,6 @@
 /// ==========================================================
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formAtualizar');
   const mensagem = document.getElementById('mensagem');
