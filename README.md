@@ -46,4 +46,6 @@ O ip do servidor frontend é 164.152.36.34 e o ip do backend é 137.131.168.114;
 
 As portas usadas pelos servidores é 443(servidor apache), 8443(backend em Python Flask) e 22(Túnel SSH para o Banco de dados);
 
+Para a sincronização do código nas máquinas usamos o proprio repósitorio do Github.
+
 Autores: Lucas Andrei Cancelier Marin e Giovani Zanella.
