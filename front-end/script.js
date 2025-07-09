@@ -1,97 +1,91 @@
 const API_BASE = 'https://137.131.168.114:8443';
 
-const registerForm = document.getElementById('registerForm');
-const loginForm = document.getElementById('loginForm');
-const messageEl = document.getElementById('message');
-const welcomeEl = document.getElementById('welcome');
-const saveEmailCheckbox = document.getElementById('saveEmail');
-const loginEmailInput = document.getElementById('loginEmail');
+// === Register/Login Logic ===
+let registerForm, loginForm, messageDiv, welcomeDiv;
+let loginEmailInput, saveEmailCheckbox;
 
-// Preencher email salvo (se houver)
-document.addEventListener('DOMContentLoaded', () => {
-  const savedEmail = localStorage.getItem('email');
+function showMessage(text, success = false) {
+  messageDiv.textContent = text;
+  messageDiv.style.color = success ? 'green' : 'red';
+}
+
+async function sendRequest(path, body) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  return { res, data };
+}
+
+async function handleRegister(e) {
+  e.preventDefault();
+  const email = document.getElementById('regEmail').value;
+  const senha = document.getElementById('regSenha').value;
+
+  try {
+    const { res, data } = await sendRequest('/cadastro', { email, senha });
+    if (res.ok) {
+      showMessage('Conta criada com sucesso!', true);
+      registerForm.reset();
+    } else {
+      showMessage(data.error || data.message || 'Falha no cadastro');
+    }
+  } catch (err) {
+    showMessage('Erro de conexão: ' + err.message);
+  }
+}
+
+async function handleLogin(e) {
+  e.preventDefault();
+  const email = loginEmailInput.value;
+  const senha = document.getElementById('loginSenha').value;
+
+  if (saveEmailCheckbox.checked) {
+    localStorage.setItem('savedEmail', email);
+  } else {
+    localStorage.removeItem('savedEmail');
+  }
+
+  try {
+    const { res, data } = await sendRequest('/login', { email, senha });
+    if (res.ok) {
+      showMessage('Login efetuado com sucesso!', true);
+      loginForm.reset();
+      welcomeDiv.style.display = 'block';
+      welcomeDiv.textContent = `Bem-vindo(a), ${email}!`;
+      localStorage.setItem('email', email);
+      window.location.href = 'dashboard.html';
+    } else {
+      showMessage(data.error || data.message || 'Falha no login');
+      welcomeDiv.style.display = 'none';
+    }
+  } catch (err) {
+    showMessage('Erro de conexão: ' + err.message);
+  }
+}
+
+function loadSavedEmail() {
+  const savedEmail = localStorage.getItem('savedEmail');
   if (savedEmail) {
     loginEmailInput.value = savedEmail;
     saveEmailCheckbox.checked = true;
   }
-});
-
-registerForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearMessages();
-
-  const email = document.getElementById('regEmail').value.trim();
-  const senha = document.getElementById('regSenha').value;
-
-  try {
-    const response = await fetch(`${API_BASE}/cadastro`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, senha })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      localStorage.setItem('email', email);
-      showSuccess(`Usuário cadastrado com sucesso!`);
-    } else {
-      showError(data.error || 'Erro no cadastro.');
-    }
-  } catch (error) {
-    showError('Erro de conexão com o servidor.');
-  }
-});
-
-loginForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  clearMessages();
-
-  const email = document.getElementById('loginEmail').value.trim();
-  const senha = document.getElementById('loginSenha').value;
-
-  try {
-    const response = await fetch(`${API_BASE}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, senha })
-    });
-
-    const data = await response.json();
-
-    if (response.ok) {
-      if (saveEmailCheckbox.checked) {
-        localStorage.setItem('email', email);
-      } else {
-        localStorage.removeItem('email');
-      }
-
-      welcomeEl.style.display = 'block';
-      welcomeEl.textContent = `Bem-vindo(a), ${email}!`;
-    } else {
-      showError(data.error || 'Erro no login.');
-    }
-  } catch (error) {
-    showError('Erro de conexão com o servidor.');
-  }
-});
-
-// Utilitários de UI
-function showError(msg) {
-  messageEl.textContent = msg;
-  messageEl.style.color = 'red';
 }
 
-function showSuccess(msg) {
-  messageEl.textContent = msg;
-  messageEl.style.color = 'green';
-}
+function initRegisterLogin() {
+  registerForm = document.getElementById('registerForm');
+  loginForm = document.getElementById('loginForm');
+  messageDiv = document.getElementById('message');
+  welcomeDiv = document.getElementById('welcome');
+  loginEmailInput = document.getElementById('loginEmail');
+  saveEmailCheckbox = document.getElementById('saveEmail');
 
-function clearMessages() {
-  messageEl.textContent = '';
-  welcomeEl.style.display = 'none';
+  if (registerForm) registerForm.addEventListener('submit', handleRegister);
+  if (loginForm) loginForm.addEventListener('submit', handleLogin);
+  if (loginForm) loadSavedEmail();
 }
-
 
 
 /// ==========================================================
