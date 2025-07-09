@@ -150,7 +150,3 @@ function initRegisterLogin() {
     });
 
 
-
-
-
-
